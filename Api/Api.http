@@ -1,5 +1,0 @@
-@Api_HostAddress = https://localhost:7297
-
-GET {{Api_HostAddress}}/Calendar/GetWeekdays?startDate=2023-04-21&endDate=2023-04-30
-
-###
