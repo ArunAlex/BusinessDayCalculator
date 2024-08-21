@@ -77,6 +77,11 @@ namespace Application.UseCase
 				return -1;
 			}
 
+			if (publicHolidays.AsEnumerable().Any(p => p.Date < DateTime.MinValue.Date || p.Date > DateTime.MaxValue))
+			{
+				return -1;
+			}
+
 			if (firstDay >= endDay)
 			{
 				return 0;
@@ -99,11 +104,11 @@ namespace Application.UseCase
 		}
 
 		/// <summary>
-		/// Task 2: Get Number of Business Days between Two dates by rules
+		/// Task 3: Get Number of Business Days between Two dates by rules
 		/// </summary>
 		/// <param name="firstDate"></param>
 		/// <param name="secondDate"></param>
-		/// <param name="publicHolidays"></param>
+		/// <param name="publicHolidayRules"></param>
 		/// <returns></returns>
 		public int BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IEnumerable<IHolidayRule> publicHolidayRules)
 		{

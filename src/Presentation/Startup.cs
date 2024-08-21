@@ -25,17 +25,6 @@ namespace Api
 		{
 			services.AddWebServices(Configuration);
 			services.AddApplicationServices(Configuration);
-
-			services.AddSwaggerGen(options =>
-			{
-				options.SwaggerDoc("v1", new OpenApiInfo { Title = "Calendar API", Version = "v1" });
-
-				// Add support for XML comments
-				var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-				var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-				options.IncludeXmlComments(xmlPath);
-			});
-
 			services.AddHealthChecks();
 		}
 

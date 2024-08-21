@@ -35,16 +35,16 @@ namespace Application.RuleBehaviour
 
 		private DateTime GetEasterSunday(int year)
 		{
-			//Oudin's Algorithm - http://www.smart.net/~mmontes/oudin.html
+			//Oudin's Algorithm
+			var a = year % 19;
+			var b = year / 100;
+			var c = (b - b / 4 - (8 * b + 13) / 25 + 19 * a + 15) % 30;
+			var d = c - (c / 28) * (1 - (c / 28) * (29 / (c + 1)) * ((21 - a) / 11));
+			var e = (year + year / 4 + d + 2 - b + b / 4) % 7;
+			var f = d - e;
 
-			var g = year % 19;
-			var c = year / 100;
-			var h = (c - c / 4 - (8 * c + 13) / 25 + 19 * g + 15) % 30;
-			var i = h - (h / 28) * (1 - (h / 28) * (29 / (h + 1)) * ((21 - g) / 11));
-			var j = (year + year / 4 + i + 2 - c + c / 4) % 7;
-			var p = i - j;
-			var easterDay = 1 + (p + 27 + (p + 6) / 40) % 31;
-			var easterMonth = 3 + (p + 26) / 30;
+			var easterDay = 1 + (f + 27 + (f + 6) / 40) % 31;
+			var easterMonth = 3 + (f + 26) / 30;
 
 			return new DateTime(year, easterMonth, easterDay);
 		}

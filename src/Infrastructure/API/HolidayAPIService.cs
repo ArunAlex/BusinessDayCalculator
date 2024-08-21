@@ -7,10 +7,10 @@ namespace Infrastructure.API
 {
     /// <summary>
     /// This Service to return a list of holidays in AU
-    /// This is not part of the task excerise but just a different approach 
+    /// This is not part of the task excerise but was trying a different approach 
     /// to get a list of holidays.
     /// </summary>
-	public class HolidayAPIService : IHolidayService<Holiday>
+	public class HolidayAPIService : IHolidayAdapter<Holiday>
     {
         private readonly IMemoryCache _memoryCache;
         private readonly IHttpClientFactory _httpClientFactory;

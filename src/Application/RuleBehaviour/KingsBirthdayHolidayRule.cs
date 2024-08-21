@@ -36,25 +36,29 @@ namespace Application.RuleBehaviour
 				case States.TAS:
 				case States.VIC:
 					//second Monday in June
-					kingsBirthday = FindNext(new DateTime(year, 6, 1), DayOfWeek.Monday).AddDays(7);
+					var dt = new DateTime(year, 6, 1);
+					kingsBirthday = dt.FindNext(DayOfWeek.Monday).AddDays(7);
 					break;
 
 				case States.QLD:
 					//first Monday in October
 					if (year >= 2016 || year == 2012)
 					{
-						kingsBirthday = FindNext(new DateTime(year, 10, 1), DayOfWeek.Monday);
+						var dtQld1 = new DateTime(year, 10, 1);
+						kingsBirthday = dtQld1.FindNext(DayOfWeek.Monday);
 					}
 					else
 					{
 						//before 2016 was in June
-						kingsBirthday = FindNext(new DateTime(year, 6, 1), DayOfWeek.Monday).AddDays(7);
+						var dtQld2 = new DateTime(year, 6, 1);
+						kingsBirthday = dtQld2.FindNext(DayOfWeek.Monday).AddDays(7);
 					}
 					break;
 
 				case States.WA:
 					//last Monday of September or first of October. No firm rule, all recent dates are September
-					kingsBirthday = FindPrevious(new DateTime(year, 9, 30), DayOfWeek.Monday);
+					var dtWA = new DateTime(year, 9, 30);
+					kingsBirthday = dtWA.FindPrevious(DayOfWeek.Monday);
 					break;
 
 				default:
@@ -62,27 +66,6 @@ namespace Application.RuleBehaviour
 			}
 
 			return kingsBirthday;
-
-		}
-
-		public DateTime FindNext(DateTime hol, DayOfWeek day)
-		{
-			while (hol.DayOfWeek != day)
-			{
-				hol = hol.AddDays(1);
-			}
-
-			return hol;
-		}
-
-		public DateTime FindPrevious(DateTime hol, DayOfWeek day)
-		{
-			while (hol.DayOfWeek != day)
-			{
-				hol = hol.AddDays(-1);
-			}
-
-			return hol;
 		}
 	}
 }

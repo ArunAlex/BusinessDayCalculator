@@ -33,37 +33,31 @@ namespace Application.RuleBehaviour
 				case States.NSW:
 				case States.SA:
 					//Australian Capital Territory, New South Wales and South Australia = first Monday in October
-					labourDay = FindNext(new DateTime(year, 10, 1), DayOfWeek.Monday); break;
+					var dt = new DateTime(year, 10, 1);
+					labourDay = dt.FindNext(DayOfWeek.Monday); break;
 
 				case States.NT:
 				case States.QLD:
 					//Northern Territory and Queensland = May Day
-					labourDay = FindNext(new DateTime(year, 5, 1), DayOfWeek.Monday); break;
+					var dtNT = new DateTime(year, 5, 1);
+					labourDay = dtNT.FindNext(DayOfWeek.Monday); break;
 
 				case States.TAS:
 				case States.VIC:
 					//Victoria and Tasmania = second Monday in March ("Eight Hours Day").
-					labourDay = FindNext(new DateTime(year, 3, 1), DayOfWeek.Monday).AddDays(7); break;
+					var dtTas = new DateTime(year, 3, 1);
+					labourDay = dtTas.FindNext(DayOfWeek.Monday).AddDays(7); break;
 
 				case States.WA:
 					//Western Australia= first Monday in March
-					labourDay = FindNext(new DateTime(year, 3, 1), DayOfWeek.Monday); break;
+					var dtWA = new DateTime(year, 3, 1);
+					labourDay = dtWA.FindNext(DayOfWeek.Monday); break;
 
 				default:
 					break;
 			}
 
 			return labourDay;
-		}
-
-		public DateTime FindNext(DateTime hol, DayOfWeek day)
-		{
-			while (hol.DayOfWeek != day)
-			{
-				hol = hol.AddDays(1);
-			}
-
-			return hol;
 		}
 	}
 }

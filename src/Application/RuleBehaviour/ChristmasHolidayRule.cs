@@ -31,36 +31,24 @@ namespace Application.RuleBehaviour
 
 		private DateTime GetChristmas(int year)
 		{
-			return FixWeekend(new DateTime(year, 12, 25));
+			var dt = new DateTime(year, 12, 25);
+			return dt.NextWeekend();
 		}
 
 		private DateTime GetBoxingDay(int year)
 		{
-			DateTime hol = new DateTime(year, 12, 26);
-			//if Xmas=Sun, it's shifted to Mon and 26 also gets shifted
-			bool isSundayOrMonday =
-				hol.DayOfWeek == DayOfWeek.Sunday ||
-				hol.DayOfWeek == DayOfWeek.Monday;
-			hol = FixWeekend(hol);
+			DateTime dt = new DateTime(year, 12, 26);
+
+			//When Xmas is on Sun,holiday is shifted to Mon and Boxing day will also gets shifted by another day
+			bool isSundayOrMonday = dt.DayOfWeek == DayOfWeek.Sunday || dt.DayOfWeek == DayOfWeek.Monday;
+
+			dt = dt.NextWeekend();
 			if (isSundayOrMonday)
 			{
-				hol = hol.AddDays(1);
+				dt = dt.AddDays(1);
 			}
-			return hol;
-		}
 
-		private DateTime FixWeekend(DateTime hol)
-		{
-			if (hol.DayOfWeek == DayOfWeek.Sunday)
-			{
-				hol = hol.AddDays(1);
-			}
-			else if (hol.DayOfWeek == DayOfWeek.Saturday)
-			{
-				hol = hol.AddDays(2);
-			}
-			return hol;
+			return dt;
 		}
-
 	}
 }
