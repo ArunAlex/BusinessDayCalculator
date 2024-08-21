@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Domain.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application
+namespace Application.UseCase
 {
-	public class BusinessDayCounter
+	public class BusinessDayCounter : IBusinessDayCounter
 	{
 		public BusinessDayCounter()
 		{
@@ -23,6 +24,16 @@ namespace Application
 		{
 			var firstDay = firstDate.Date;
 			var endDay = secondDate.Date;
+
+			if (firstDay < DateTime.MinValue.Date || firstDay > DateTime.MaxValue)
+			{
+				return -1;
+			}
+
+			if (endDay < DateTime.MinValue.Date || endDay > DateTime.MaxValue)
+			{
+				return -1;
+			}
 
 			if (firstDay >= endDay)
 			{
@@ -56,6 +67,16 @@ namespace Application
 			var firstDay = firstDate.Date;
 			var endDay = secondDate.Date;
 
+			if (firstDay < DateTime.MinValue.Date || firstDay > DateTime.MaxValue)
+			{
+				return -1;
+			}
+
+			if (endDay < DateTime.MinValue.Date || endDay > DateTime.MaxValue)
+			{
+				return -1;
+			}
+
 			if (firstDay >= endDay)
 			{
 				return 0;
@@ -69,6 +90,51 @@ namespace Application
 					!(start.DayOfWeek.Equals(DayOfWeek.Saturday) || start.DayOfWeek.Equals(DayOfWeek.Sunday)))
 				{
 					counter++;
+				}
+
+				start = start.AddDays(1);
+			}
+
+			return counter;
+		}
+
+		/// <summary>
+		/// Task 2: Get Number of Business Days between Two dates by rules
+		/// </summary>
+		/// <param name="firstDate"></param>
+		/// <param name="secondDate"></param>
+		/// <param name="publicHolidays"></param>
+		/// <returns></returns>
+		public int BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IEnumerable<IHolidayRule> publicHolidayRules)
+		{
+			var firstDay = firstDate.Date;
+			var endDay = secondDate.Date;
+
+			if (firstDay < DateTime.MinValue.Date || firstDay > DateTime.MaxValue)
+			{
+				return -1;
+			}
+
+			if (endDay < DateTime.MinValue.Date || endDay > DateTime.MaxValue)
+			{
+				return -1;
+			}
+
+			if (firstDay >= endDay)
+			{
+				return 0;
+			}
+
+			var counter = 0;
+			var start = firstDay.AddDays(1);
+			while (start < endDay)
+			{
+				if (!(start.DayOfWeek.Equals(DayOfWeek.Saturday) || start.DayOfWeek.Equals(DayOfWeek.Sunday)))
+				{
+					if (publicHolidayRules.All(x => !x.ProcessRule(start)))
+					{
+						counter++;
+					}
 				}
 
 				start = start.AddDays(1);
