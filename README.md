@@ -51,8 +51,28 @@ This should cater for things such as:
   
 Given this data structure, the BusinessDaysBetweenTwoDates() function should be able to be extended to take a list of public holiday rules, rather than a list of DateTimes, and calculate the number of business days between two dates using those rules to define public holidays.
 
-*Approach: The Public Holidays are based in Australia and every state has a date for specific holidays such as Kings Birthday. Therefore the rules has been created based on those assumptions. Every rule inherits the interface IHolidayRule and list of these rules are passed to our function BusinessDayBetweenDates. For example, KingsBirthdayHolidayRule will process the date and verify if it is on the public holiday or not. Also, this rule handles the state criteria so that the correct public holiday is verified.  
-Although, the specification doesnt talk about country specific holidays, I have added country code for the rules in order to handle country holidays. Currently all the rules created has country code AU*
+Approach: The Public Holidays are based in Australia and every state has a date for specific holidays such as Kings Birthday. Therefore the rules has been created based on those assumptions.
+
+Every rule inherits the interface IHolidayRule. 
+```
+	public interface IHolidayRule
+	{
+		string CountryCode { get; }
+
+		bool ProcessRule(DateTime dateTime);
+	}
+```
+
+To explain how a rule behaves, for example KingsBirthdayHolidayRule inheriting it, will process where
++ state based public holiday date is returned and verified with date
++ checks for specific pattern eg NSW has the holiday every second monday of June or QLD has every first Monday of October.
+  
+These conditions are handled inside ProcessRule method. In addition, I have introduced country code for the rules in order to handle country holidays. Currently all the rules created has country code 'AU' and could be expanded to other countries for future purpose
+
+All these rules will be passed as an IEnumerable below and these rules will be injected in the Startup.cs file. When we want to expand to other countries, we can change the injection rules based on the country code.
+```
+	int BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IEnumerable<IHolidayRule> publicHolidays);
+```
 
 The solution is in .NET 7.0 and I have created a WEB API project where the functions are used inside the endpoints
 
@@ -60,7 +80,7 @@ The solution is in .NET 7.0 and I have created a WEB API project where the funct
 * /Calendar/BusinessDays - Get No of Businessdays based on time period and public holiday date list
 * /Calendar/AUBusinessDays - Get No of Businessdays that do not satisfy the public holiday rules in Australia
 
-Note: I would like implement a Dockerfile so that we can run the api on a docker container but didnt have the time to do it.
+Note: I would like implement a Dockerfile so that we can run the api on a docker container but didnt have the time to do it. So please clone the project in Visual Studio and run the profile 'Core API' in launchSettings.json to view the swagger UI. You can test it in Swagger or in Postman using the app url https://localhost:7297 followed by the above endpoints
 
 
 
