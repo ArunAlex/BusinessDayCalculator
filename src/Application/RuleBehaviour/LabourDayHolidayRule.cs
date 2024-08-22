@@ -5,6 +5,9 @@ using Microsoft.Extensions.Options;
 
 namespace Application.RuleBehaviour
 {
+	/// <summary>
+	/// Process date is Labour day as per the state rule
+	/// </summary>
 	public class LabourDayHolidayRule : IHolidayRule
 	{
 		private readonly string? _state;

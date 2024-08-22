@@ -22,9 +22,16 @@ namespace Api
 		}
 
 		public void ConfigureServices(IServiceCollection services)
-		{
+		{ 
 			services.AddWebServices(Configuration);
 			services.AddApplicationServices(Configuration);
+
+			services.AddLogging(log =>
+			{
+				log.ClearProviders();
+				log.AddConsole();
+			});
+
 			services.AddHealthChecks();
 		}
 

@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Application.UseCase;
+﻿using Application.UseCase;
 using Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace Application.UnitTests.UseCase.Tests
 {
-    [TestFixture]
+	[TestFixture]
     public class BusinessDayCounterTests
     {
+        private Mock<ILogger<BusinessDayCounter>> _mockLogger;
         private BusinessDayCounter testObject;
         private Mock<IHolidayRule> mockHolidayRule1;
         private Mock<IHolidayRule> mockHolidayRule2;
@@ -21,7 +17,8 @@ namespace Application.UnitTests.UseCase.Tests
         [SetUp]
         public void Setup()
         {
-            testObject = new BusinessDayCounter();
+            _mockLogger = new Mock<ILogger<BusinessDayCounter>>();
+            testObject = new BusinessDayCounter(_mockLogger.Object);
 			mockHolidayRule1 = new Mock<IHolidayRule>();
 			mockHolidayRule1.Setup(x => x.ProcessRule(It.IsAny<DateTime>())).Returns(false);
 			mockHolidayRule2 = new Mock<IHolidayRule>();

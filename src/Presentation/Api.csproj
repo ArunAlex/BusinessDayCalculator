@@ -5,7 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
-	<NoWarn>$(NoWarn);1591</NoWarn>
+	<NoWarn>$(NoWarn);1591;8618</NoWarn>
+	<DocumentationFile>C:\Users\a.alex\source\repos\BusinessDayCalculator\src\Presentation\Api.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

@@ -4,6 +4,9 @@ using Microsoft.Extensions.Options;
 
 namespace Application.RuleBehaviour
 {
+	/// <summary>
+	/// Process date is in Boxing day or Xmas day
+	/// </summary>
 	public class ChristmasHolidayRule : IHolidayRule
 	{
 		public string CountryCode => "AU";

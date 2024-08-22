@@ -4,6 +4,9 @@ using Domain.Interfaces;
 
 namespace Application.RuleBehaviour
 {
+	/// <summary>
+	/// Process date is if holiday on weekend (New years and Australia day) 
+	/// </summary>
 	public class WeekendHolidayRule : IHolidayRule
 	{
 		public WeekendHolidayRule() 

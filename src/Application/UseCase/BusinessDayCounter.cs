@@ -1,17 +1,15 @@
 ﻿using Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.WebSockets;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Application.UseCase
 {
 	public class BusinessDayCounter : IBusinessDayCounter
 	{
-		public BusinessDayCounter()
+		private readonly ILogger<BusinessDayCounter> _logger;
+
+		public BusinessDayCounter(ILogger<BusinessDayCounter> logger)
 		{
+			_logger = logger;
 		}
 
 		/// <summary>
@@ -22,18 +20,9 @@ namespace Application.UseCase
 		/// <returns></returns>
 		public int WeekdaysBetweenTwoDates(DateTime firstDate, DateTime secondDate)
 		{
+			_logger.LogInformation("Call WeekdaysBetweenTwoDates");
 			var firstDay = firstDate.Date;
 			var endDay = secondDate.Date;
-
-			if (firstDay < DateTime.MinValue.Date || firstDay > DateTime.MaxValue)
-			{
-				return -1;
-			}
-
-			if (endDay < DateTime.MinValue.Date || endDay > DateTime.MaxValue)
-			{
-				return -1;
-			}
 
 			if (firstDay >= endDay)
 			{
@@ -64,23 +53,9 @@ namespace Application.UseCase
 		/// <returns></returns>
 		public int BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IList<DateTime> publicHolidays)
 		{
+			_logger.LogInformation("Call BusinessDaysBetweenTwoDates using holidays");
 			var firstDay = firstDate.Date;
 			var endDay = secondDate.Date;
-
-			if (firstDay < DateTime.MinValue.Date || firstDay > DateTime.MaxValue)
-			{
-				return -1;
-			}
-
-			if (endDay < DateTime.MinValue.Date || endDay > DateTime.MaxValue)
-			{
-				return -1;
-			}
-
-			if (publicHolidays.AsEnumerable().Any(p => p.Date < DateTime.MinValue.Date || p.Date > DateTime.MaxValue))
-			{
-				return -1;
-			}
 
 			if (firstDay >= endDay)
 			{
@@ -112,23 +87,9 @@ namespace Application.UseCase
 		/// <returns></returns>
 		public int BusinessDaysBetweenTwoDates(DateTime firstDate, DateTime secondDate, IEnumerable<IHolidayRule> publicHolidayRules)
 		{
+			_logger.LogInformation("Call BusinessDaysBetweenTwoDates using rules");
 			var firstDay = firstDate.Date;
 			var endDay = secondDate.Date;
-
-			if (firstDay < DateTime.MinValue.Date || firstDay > DateTime.MaxValue)
-			{
-				return -1;
-			}
-
-			if (endDay < DateTime.MinValue.Date || endDay > DateTime.MaxValue)
-			{
-				return -1;
-			}
-
-			if (firstDay >= endDay)
-			{
-				return 0;
-			}
 
 			var counter = 0;
 			var start = firstDay.AddDays(1);
