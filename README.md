@@ -51,5 +51,15 @@ This should cater for things such as:
   
 Given this data structure, the BusinessDaysBetweenTwoDates() function should be able to be extended to take a list of public holiday rules, rather than a list of DateTimes, and calculate the number of business days between two dates using those rules to define public holidays.
 
+*Assumptions: The Public Holidays are based in Australia and every state has a date for specific holidays such as Kings Birthday. Therefore the rules has been created based on those assumptions. Every rule inherits the interface IHolidayRule and list of these rules are passed to our function BusinessDayBetweenDates. Also, I had taken the effort to have the country code for these rules which is AU. The intention is to expand holiday rules beyond Australia and we can pass rules specific to countries*
+
+The solution is in .NET 7.0 and I have created a WEB API project where the functions are used inside the endpoints
+
+* /Calendar/Weekdays - Gets No of Weekdays based on time period
+* /Calendar/BusinessDays - Get No of Businessdays based on time period and public holiday date list
+* /Calendar/AUBusinessDays - Get No of Businessdays that do not satisfy the public holiday rules in Australia
+
+Note: I would like further implement Dockerfile so that we can run the api on a docker container but didnt have the time.
+
 
 
