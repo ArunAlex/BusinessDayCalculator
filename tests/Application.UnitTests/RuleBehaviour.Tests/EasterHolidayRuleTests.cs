@@ -1,14 +1,6 @@
 ﻿using Application.RuleBehaviour;
-using Application.UseCase;
-using Domain.Common;
-using Domain.Interfaces;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.UnitTests.RuleBehaviour.Tests
 {
@@ -16,11 +8,13 @@ namespace Application.UnitTests.RuleBehaviour.Tests
 	public class EasterHolidayRuleTests
 	{
 		private EasterHolidayRule testObject;
+		private Mock<ILogger<EasterHolidayRule>> _mockLogger;
 
 		[SetUp]
 		public void Setup()
 		{
-			testObject = new EasterHolidayRule();
+			_mockLogger = new Mock<ILogger<EasterHolidayRule>>();
+			testObject = new EasterHolidayRule(_mockLogger.Object);
 		}
 
 		[Test]

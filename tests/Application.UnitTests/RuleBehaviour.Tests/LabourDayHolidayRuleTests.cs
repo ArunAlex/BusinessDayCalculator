@@ -1,29 +1,25 @@
 ﻿using Application.RuleBehaviour;
-using Application.UseCase;
 using Domain.Common;
 using Domain.Enum;
-using Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.UnitTests.RuleBehaviour.Tests
 {
 	[TestFixture]
 	public class LabourDayHolidayRuleTests
 	{
+		private Mock<ILogger<LabourDayHolidayRule>> _mockLogger;
 
 		[TestCaseSource(nameof(LabourDayTestCases))]
 		public void ProcessRule_LabourDay(DateTime dateTime, States state, bool expected)
 		{
+			_mockLogger = new Mock<ILogger<LabourDayHolidayRule>>();
 			var testObject = new LabourDayHolidayRule(Options.Create(new PublicHolidayOptions
 			{
 				State = state.ToString()
-			}));
+			}), _mockLogger.Object);
 
 			Assert.AreEqual(testObject.ProcessRule(dateTime), expected);
 		}

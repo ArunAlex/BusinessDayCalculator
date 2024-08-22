@@ -1,6 +1,7 @@
 ﻿using Domain.Common;
 using Domain.Enum;
 using Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Application.RuleBehaviour
@@ -11,16 +12,19 @@ namespace Application.RuleBehaviour
 	public class LabourDayHolidayRule : IHolidayRule
 	{
 		private readonly string? _state;
+		private readonly ILogger<LabourDayHolidayRule> _logger;
 
 		public string CountryCode => "AU";
 
-		public LabourDayHolidayRule(IOptions<PublicHolidayOptions> options)
+		public LabourDayHolidayRule(IOptions<PublicHolidayOptions> options, ILogger<LabourDayHolidayRule> logger)
 		{
 			_state = options.Value.State ?? "All";
+			_logger = logger;
 		}
 
 		public bool ProcessRule(DateTime dateTime)
 		{
+			_logger.LogInformation($"Invoke Labour Day rule {dateTime.ToString("dd/MM/yyyy")}");
 			var labourDay = GetLabourDay(dateTime.Year, Enum.Parse<States>(_state));
 			return !labourDay.HasValue || labourDay.Value.Date.Equals(dateTime.Date);
 		}

@@ -1,5 +1,6 @@
 ﻿using Domain.Common;
 using Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Application.RuleBehaviour
@@ -10,15 +11,18 @@ namespace Application.RuleBehaviour
 	public class EasterHolidayRule : IHolidayRule
 	{
 		private readonly string? _state;
+		private readonly ILogger<EasterHolidayRule> _logger;
 
 		public string CountryCode => "AU";
 
-		public EasterHolidayRule()
+		public EasterHolidayRule(ILogger<EasterHolidayRule> logger)
 		{
+			_logger = logger;
 		}
 
 		public bool ProcessRule(DateTime dateTime)
 		{
+			_logger.LogInformation($"Invoke Easter rule {dateTime.ToString("dd/MM/yyyy")}");
 			return IsGoodFriday(dateTime) || IsEasterMonday(dateTime);
 		}
 

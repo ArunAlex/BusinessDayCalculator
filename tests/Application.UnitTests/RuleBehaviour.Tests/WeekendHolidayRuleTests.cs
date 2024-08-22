@@ -1,12 +1,6 @@
 ﻿using Application.RuleBehaviour;
-using Application.UseCase;
-using Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.UnitTests.RuleBehaviour.Tests
 {
@@ -14,11 +8,13 @@ namespace Application.UnitTests.RuleBehaviour.Tests
 	public class WeekendHolidayRuleTests
 	{
 		private WeekendHolidayRule testObject;
+		private Mock<ILogger<WeekendHolidayRule>> _mockLogger;
 
 		[SetUp]
 		public void Setup()
 		{
-			testObject = new WeekendHolidayRule();
+			_mockLogger = new Mock<ILogger<WeekendHolidayRule>>();
+			testObject = new WeekendHolidayRule(_mockLogger.Object);
 		}
 
 		[TestCaseSource(nameof(WeekendTestCases))]

@@ -1,6 +1,8 @@
-﻿using Domain.Common;
+﻿using Application.UseCase;
+using Domain.Common;
 using Domain.Enum;
 using Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Application.RuleBehaviour
@@ -11,16 +13,19 @@ namespace Application.RuleBehaviour
 	public class AnzacDayHolidayRule : IHolidayRule
 	{
 		private readonly string? _state;
+		private readonly ILogger<AnzacDayHolidayRule> _logger;
 
-		public AnzacDayHolidayRule(IOptions<PublicHolidayOptions> options)
+		public AnzacDayHolidayRule(IOptions<PublicHolidayOptions> options, ILogger<AnzacDayHolidayRule> logger)
 		{
 			_state = options.Value.State ?? "All";
+			_logger = logger;
 		}
 
 		public string CountryCode => "AU";
 
 		public bool ProcessRule(DateTime dateTime)
 		{
+			_logger.LogInformation($"Invoke Anzac Day rule {dateTime.ToString("dd/MM/yyyy")}");
 			var anzacDay = GetAnzacDay(dateTime.Year, Enum.Parse<States>(_state));
 			return anzacDay.Date.Equals(dateTime.Date);
 		}

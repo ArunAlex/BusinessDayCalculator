@@ -1,6 +1,7 @@
 ﻿using Domain.Common;
 using Domain.Enum;
 using Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Application.RuleBehaviour
@@ -11,16 +12,19 @@ namespace Application.RuleBehaviour
 	public class KingsBirthdayHolidayRule : IHolidayRule
 	{
 		private readonly string? _state;
+		private readonly ILogger<KingsBirthdayHolidayRule> _logger;
 
 		public string CountryCode => "AU";
 
-		public KingsBirthdayHolidayRule(IOptions<PublicHolidayOptions> options)
+		public KingsBirthdayHolidayRule(IOptions<PublicHolidayOptions> options, ILogger<KingsBirthdayHolidayRule> logger)
 		{
 			_state = options.Value.State ?? "All";
+			_logger = logger;
 		}
 
 		public bool ProcessRule(DateTime dateTime)
 		{
+			_logger.LogInformation($"Invoke Kings Birthday rule {dateTime.ToString("dd/MM/yyyy")}");
 			var kingsBirthday = GetKingsBirthday(dateTime.Year, Enum.Parse<States>(_state));
 			return !kingsBirthday.HasValue || kingsBirthday.Value.Date.Equals(dateTime.Date) ;
 		}

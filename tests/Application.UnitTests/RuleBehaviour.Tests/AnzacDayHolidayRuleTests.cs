@@ -1,30 +1,25 @@
 ﻿using Application.RuleBehaviour;
-using Application.UseCase;
 using Domain.Common;
 using Domain.Enum;
-using Domain.Interfaces;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.JavaScript;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.UnitTests.RuleBehaviour.Tests
 {
 	[TestFixture]
 	public class AnzacDayHolidayRuleTests
 	{
+		private Mock<ILogger<AnzacDayHolidayRule>> _mockLogger;
+
 		[Test]
 		public void ProcessRule_NotAnzacDay()
 		{
+			_mockLogger = new Mock<ILogger<AnzacDayHolidayRule>>();
 			var testObject = new AnzacDayHolidayRule(Options.Create(new PublicHolidayOptions
 			{
 				State = "NSW"
-			}));
+			}), _mockLogger.Object);
 
 			Assert.AreEqual(testObject.ProcessRule(new DateTime(2019, 1, 21)), false);
 		}
@@ -32,10 +27,11 @@ namespace Application.UnitTests.RuleBehaviour.Tests
 		[TestCaseSource(nameof(AnzacDayTestCases))]
 		public void ProcessRule_AnzacDay(DateTime dateTime, States state, bool expected)
 		{
+			_mockLogger = new Mock<ILogger<AnzacDayHolidayRule>>();
 			var testObject = new AnzacDayHolidayRule(Options.Create(new PublicHolidayOptions
 			{
 				State = state.ToString()
-			}));
+			}), _mockLogger.Object);
 			
 			Assert.AreEqual(testObject.ProcessRule(dateTime), expected);
 		}

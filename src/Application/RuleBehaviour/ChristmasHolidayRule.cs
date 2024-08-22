@@ -1,5 +1,6 @@
 ﻿using Domain.Common;
 using Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Application.RuleBehaviour
@@ -10,13 +11,16 @@ namespace Application.RuleBehaviour
 	public class ChristmasHolidayRule : IHolidayRule
 	{
 		public string CountryCode => "AU";
+		private readonly ILogger<ChristmasHolidayRule> _logger;
 
-		public ChristmasHolidayRule()
+		public ChristmasHolidayRule(ILogger<ChristmasHolidayRule> logger)
 		{
+			_logger = logger;
 		}
 
 		public bool ProcessRule(DateTime dateTime)
 		{
+			_logger.LogInformation($"Invoke Christmas rule {dateTime.ToString("dd/MM/yyyy")}");
 			return IsChristmas(dateTime) || IsBoxingDay(dateTime);
 		}
 

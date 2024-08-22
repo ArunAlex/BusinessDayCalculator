@@ -1,5 +1,6 @@
 ﻿using Domain.Common;
 using Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace Application.RuleBehaviour
 {
@@ -8,14 +9,18 @@ namespace Application.RuleBehaviour
 	/// </summary>
 	public class WeekdayHolidayRule : IHolidayRule
 	{
-		public WeekdayHolidayRule()
+		private readonly ILogger<WeekdayHolidayRule> _logger;
+
+		public WeekdayHolidayRule(ILogger<WeekdayHolidayRule> logger)
 		{
+			_logger = logger;
 		}
 
 		public string CountryCode => "AU";
 
 		public bool ProcessRule(DateTime date)
 		{
+			_logger.LogInformation($"Invoke Holidays on weekday rule {date.ToString("dd/MM/yyyy")}");
 			var holidays = GetSameDayHolidays(date.Year);
 
 			var weekDayHolidays = holidays.Where(h => h.Date.DayOfWeek != DayOfWeek.Sunday || h.Date.DayOfWeek != DayOfWeek.Saturday);

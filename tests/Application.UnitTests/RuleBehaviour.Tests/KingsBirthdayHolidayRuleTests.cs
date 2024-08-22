@@ -1,28 +1,25 @@
 ﻿using Application.RuleBehaviour;
-using Application.UseCase;
 using Domain.Common;
 using Domain.Enum;
-using Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.UnitTests.RuleBehaviour.Tests
 {
 	[TestFixture]
 	public class KingsBirthdayHolidayRuleTests
 	{
+		private Mock<ILogger<KingsBirthdayHolidayRule>> _mockLogger;
+
 		[TestCaseSource(nameof(KingsBirthdayTestCases))]
 		public void ProcessRule_KingsBirthday(DateTime dateTime, States state, bool expected)
 		{
+			_mockLogger = new Mock<ILogger<KingsBirthdayHolidayRule>>();
 			var testObject = new KingsBirthdayHolidayRule(Options.Create(new PublicHolidayOptions
 			{
 				State = state.ToString()
-			}));
+			}), _mockLogger.Object);
 
 			Assert.AreEqual(testObject.ProcessRule(dateTime), expected);
 		}
